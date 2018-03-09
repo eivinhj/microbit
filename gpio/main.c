@@ -1,6 +1,12 @@
 #include <stdint.h>
 
+#define __GPIO_BASE_ADDRESS__ 0x50000000
+
 #define GPIO ((NRF_GPIO_REGS*)__GPIO_BASE_ADDRESS__)
+#define __BUTTON_A_PIN__ 17
+#define __BUTTON_B_PIN__ 26
+#define __BUTTON_A_BIT_MASK__ 0x20000;
+#define __BUTTON_B_BIT_MASK__ 0x4000000;
 
 typedef struct {
 	volatile uint32_t RESERVED0[321];
@@ -11,7 +17,7 @@ typedef struct {
 	volatile uint32_t DIR;
 	volatile uint32_t DIRSET;
 	volatile uint32_t DIRCLR;
-	volatile uint32_t RESERVED1[__RESERVED1_SIZE__];
+	volatile uint32_t RESERVED1[120]; //__RESERVED_SIZE_!__ 0x700 / 4 in base 10 || 448 ELLER 120
 	volatile uint32_t PIN_CNF[32];
 } NRF_GPIO_REGS;
 
@@ -29,11 +35,31 @@ int main(){
 	int sleep = 0;
 	while(1){
 
+		uint32_t gpio_in = GPIO->IN;
+
+		uint32_t btn_a_pressed = gpio_in & __BUTTON_A_BIT_MASK__ ;
+		uint32_t btn_b_pressed = gpio_in & __BUTTON_B_BIT_MASK__;
 		/* Check if button B is pressed;
 		 * turn on LED matrix if it is. */
+		if(!btn_b_pressed)
+		{
+			uint32_t gpio_out = GPIO->OUT;
+			gpio_out = gpio_out & ~(0xFFF0);
+			gpio_out = gpio_out |  0xE000; 
+			GPIO->OUT = gpio_out;
+		} 
 
 		/* Check if button A is pressed;
 		 * turn off LED matrix if it is. */
+		else if (!btn_a_pressed)
+		{
+			uint32_t gpio_out = GPIO->OUT;
+		gpio_out = gpio_out & ~(0xFFF0);
+		gpio_out = gpio_out |  0x0000; 
+		GPIO->OUT = gpio_out;
+		} 
+
+		
 
 		sleep = 10000;
 		while(--sleep);
