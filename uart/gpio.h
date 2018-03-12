@@ -3,6 +3,10 @@
 #include <stdint.h>
 
 #define GPIO ((NRF_GPIO_REG*)0x50000000)
+#define __BUTTON_A_PIN__ 17
+#define __BUTTON_B_PIN__ 26
+#define __BUTTON_A_BIT_MASK__ 0x20000;
+#define __BUTTON_B_BIT_MASK__ 0x4000000;
 
 typedef struct {
 	volatile uint32_t RESERVED0[321];
