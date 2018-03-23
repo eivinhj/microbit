@@ -48,7 +48,7 @@ int main()
 		if(!btn_b_not_pressed_new && btn_b_not_pressed)
 		{
 			set_led_matrix_on();
-			bool led_matrix_on = TRUE;   ff
+			led_matrix_on = TRUE;
 			iprintf("Button B is pressed");
 		} 
 
@@ -57,8 +57,8 @@ int main()
 		else if (!btn_a_not_pressed_new && btn_a_not_pressed)
 		{
 			set_led_matrix_off();
-			bool led_matrix_on = FALSE;
-		    iprintf("Button A is pressed");
+			led_matrix_on = FALSE;
+		    	iprintf("Button A is pressed");
 		} 
 
 		btn_a_not_pressed = btn_a_not_pressed_new;
