@@ -48,17 +48,19 @@ volatile uint32_t ADDRESS;
 
 void twi_init() 
 {
-	GPIO->PIN_CNF[SCL_PIN] = (6 << 8) | (3 << 2);
+	GPIO->PIN_CNF[SCL_PIN] = (6 << 8) | (3 << 2);    
 
 	GPIO->PIN_CNF[SDA_PIN] = (6 << 8) | (3 << 2);
-
-	TWI0->PSELSCL = SCL_PIN;
-	TWI0->PSELSDA = SDA_PIN;
 
 	//TWI0->RXDREADY = 0;
 	//TWI0->TXDSENT = 0;
 	//TWI0->ERROR = 0;
+	
 
+	TWI0->PSELSCL = SCL_PIN;
+	TWI0->PSELSDA = SDA_PIN;
+
+	
 	TWI0 ->FREQUENCY = 0x01980000; //100 kbps transfer frequency
 
 	TWI0->ENABLE = 5; //Enable TWI
@@ -75,14 +77,18 @@ void twi_multi_read(
 	TWI0->TXDSENT = 0;
 	TWI0->STARTTX = 1;
 	TWI0->TXD = start_register;
+
 	while (!TWI0->TXDSENT)
 	{
 		//Throw garbage
 		if(TWI0->ERROR)
 				return;
 	}
+
+
 	TWI0->RXDREADY = 0;
 	TWI0->STARTRX = 1;
+
 	for (int i = 0; i < registers_to_read - 1; i++) 
 	{
 		while (!TWI0->RXDREADY)
@@ -93,17 +99,17 @@ void twi_multi_read(
 		}
 		TWI0->RXDREADY = 0;
 		data_buffer[i] = TWI0->RXD;
-		TWI0->RESUME = 1;
+		//TWI0->RESUME = 1;			//FJERNET RESUME
 	}
 
+	TWI0->STOP = 1;
 	while (!TWI0->RXDREADY)
 	{
 		//Throw garbage
 		if(TWI0->ERROR)
 				return;
 	}
-	TWI0->RXDREADY = 0;
-	TWI0->STOP = 1;
+	//Fjernet RXDREADY og satte stop over while
 	data_buffer[registers_to_read - 1] = TWI0->RXD;
 
 	
@@ -117,6 +123,7 @@ uint8_t * data_buffer
 )
 {
 	TWI0->ADDRESS = slave_address;
+
 	TWI0->TXDSENT = 0;
 	TWI0->STARTTX = 1;
 	TWI0->TXD = start_register;
