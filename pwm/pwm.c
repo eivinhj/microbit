@@ -1,6 +1,7 @@
 #include "pwm.h"
 #include "ppi.h"
 #include "timer.h"
+#include "gpiote.h"
 
 void pwm_init(int prescaler, int period, int init_duty){
 	// Task, pin 20, toggle, start on
@@ -14,7 +15,7 @@ void pwm_init(int prescaler, int period, int init_duty){
 	PPI->PPI_CH[2].EEP = (uint32_t)&(TIMER1->COMPARE[2]);
 	PPI->PPI_CH[2].TEP = (uint32_t)&(TIMER1->CAPTURE[0]);
 	PPI->PPI_CH[3].EEP = (uint32_t)&(TIMER1->COMPARE[2]);
-	PPI->PPI_CH[3].TEP = (uint32_t)&(GPIOTE->OUT[0]);
+	PPI->PPI_CH[3].TEP = (uint32_t)&(GPIOTE->OUT[0]); 
 
 	PPI->CHENSET = (1 << 0) | (1 << 1) | (1 << 2);
 
