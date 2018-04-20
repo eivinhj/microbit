@@ -5,7 +5,7 @@
 #define GPIO ((NRF_GPIO_REGS*)__GPIO_BASE_ADDRESS__)
 #define __BUTTON_A_PIN__ 17
 #define __BUTTON_B_PIN__ 26
-#define __BUTTON_A_BIT_MASK__ 0x20000;
+#define __BUTTON_A_BIT_MASK__ 0x20000; // (1<<17)
 #define __BUTTON_B_BIT_MASK__ 0x4000000;
 
 typedef struct {

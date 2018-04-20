@@ -20,6 +20,7 @@ int main()
 	uart_init();
 	twi_init();
 	accel_init();
+	ubit_led_matrix_init();
 
 	/*uint8_t * data_buffer = (uint8_t *)malloc(3 * sizeof(int));
 	
@@ -36,6 +37,12 @@ int main()
 		int x_acc = data_buffer[0];
 		int y_acc = data_buffer[1];
 		int z_acc = data_buffer[2];
+
+		int x_accel = data_buffer[0];
+		int y_accel = data_buffer[1];
+		int x_dot = x_accel / 50;
+		int y_dot = - y_accel / 50;
+		ubit_led_matrix_light_only_at(x_dot, y_dot);
 	
 		utility_print(&uart_send,"X: %6d, Y: %6d, Z: %6d\n\r", x_acc, y_acc, z_acc);
 	}
